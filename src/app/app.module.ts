@@ -41,8 +41,11 @@ import {TabsModule} from 'ngx-bootstrap/tabs';
 import {ChartsModule} from 'ng2-charts/ng2-charts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FormsModule} from '@angular/forms';
 import {MainServiceService} from './main-service.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -60,7 +63,10 @@ import {MainServiceService} from './main-service.service';
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
-    FormsModule
+    FormsModule,
+    MatSlideToggleModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   declarations: [
     AppComponent,
@@ -77,4 +83,5 @@ import {MainServiceService} from './main-service.service';
   bootstrap: [AppComponent]
 })
 export class AppModule {
+
 }
