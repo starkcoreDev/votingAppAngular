@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import {MainServiceService} from './main-service.service';
+import * as Web3 from 'web3';
+declare let require: any;
+declare let window: any;
 
 @Component({
   // tslint:disable-next-line

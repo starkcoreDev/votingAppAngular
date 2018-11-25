@@ -1,12 +1,46 @@
 import {Injectable} from '@angular/core';
+import * as Web3 from 'web3';
+declare let require: any;
+declare let window: any;
+import * as tokenAbi from '../contract.json';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainServiceService {
 
+  private _account: string = null;
+  private _web3: any;
+
+  private _tokenContract: any;
+  private _tokenContractAddress: string = "0x200f300686ba4037aaec76ec30eed760e873a069";
+
   constructor() {
+
+    if (typeof window.web3 !== 'undefined') {
+      // Use Mist/MetaMask's provider
+      this._web3 = new Web3(window.web3.currentProvider);
+
+      // if (this._web3.version.network !== '4') {
+      //   alert('Please connect to the Ropsten network');
+      // }
+    } else {
+      console.warn(
+        'Please use a dapp browser like mist or MetaMask plugin for chrome'
+      );
+    }
+    this._web3.eth.getAccounts().then((result)=>{
+      console.log("result", result);
+    }).catch((err)=>{
+      console.error("err", err);
+    })
+    
+    // Read contract here
   }
+
+  /**
+   * Login functions
+   */
 
   // Initial declarations, holds the login data
   myLogin = {
@@ -33,5 +67,13 @@ export class MainServiceService {
     // storage save
     localStorage.setItem('myLogin', JSON.stringify(this.myLogin));
   }
+
+  /**
+   * Contract functions
+   */
+
+   
+
+
 
 }

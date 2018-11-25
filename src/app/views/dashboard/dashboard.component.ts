@@ -5,7 +5,6 @@ import {getStyle, hexToRgba} from '@coreui/coreui/dist/js/coreui-utilities';
 import {CustomTooltips} from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import {MainServiceService} from '../../main-service.service';
 import {MatSnackBar} from '@angular/material';
-import {MatChipsModule} from '@angular/material/chips';
 
 
 @Component({
@@ -53,6 +52,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("WEB3!")
     const registeredPerson = this.mainService.getLogin();
     // Check for login here
     if (!registeredPerson) {
