@@ -5,6 +5,7 @@ import {getStyle, hexToRgba} from '@coreui/coreui/dist/js/coreui-utilities';
 import {CustomTooltips} from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import {MainServiceService} from '../../main-service.service';
 import {MatSnackBar} from '@angular/material';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 @Component({
@@ -17,13 +18,18 @@ export class DashboardComponent implements OnInit {
   constructor(private router: Router, private mainService: MainServiceService, public snackBar: MatSnackBar) {
   }
 
+  // Public variables
   candidateList = [];
   showLoading = false;
   candidateAddress = '';
   candidateId = 0;
+  isCandidate = false;
 
+
+  /**
+   * Main Save candidat function, records data on the blockchain
+   */
   saveCandidate = () => {
-
     // TODO:Check the candidate information
     if (this.candidateAddress.length > 42 && Number.isInteger(this.candidateId)) {
 
@@ -47,18 +53,17 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    const registeredPerson = this.mainService.getLogin();
     // Check for login here
-    if (!this.mainService.getLogin()) {
+    if (!registeredPerson) {
       // Navigate back to login if false
       this.router.navigate(['/login']);
     }
 
-    // choose starting  behavior
-    console.log('display information saved on service', this.mainService.getLogin());
-    const registeredPerson = this.mainService.getLogin();
+    // choose starting  behavior    
     this.name = registeredPerson.name;
     this.address = registeredPerson.address;
+    this.isCandidate = registeredPerson.isCandidate;
 
     this.candidateList = [{
       name: "Test",

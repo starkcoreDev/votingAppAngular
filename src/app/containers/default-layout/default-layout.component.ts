@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { navItems } from './../../_nav';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,8 +11,8 @@ export class DefaultLayoutComponent {
   public sidebarMinimized = true;
   private changes: MutationObserver;
   public element: HTMLElement = document.body;
-  constructor() {
-
+  constructor(public snackBar: MatSnackBar) {
+    
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
     });
@@ -19,5 +20,13 @@ export class DefaultLayoutComponent {
     this.changes.observe(<Element>this.element, {
       attributes: true
     });
+
+  }
+
+  public logout = () => {
+      localStorage.removeItem('myLogin');
+      let snackBarFinished = this.snackBar.open("Logging out of the application",'LOG OUT',{
+        duration: 3000
+      });
   }
 }

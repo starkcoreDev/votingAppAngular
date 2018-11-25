@@ -10,6 +10,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material';
+import {MatChipsModule} from '@angular/material/chips';
 
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -27,7 +28,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     MatSlideToggleModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatChipsModule
   ],
   declarations: [ DashboardComponent ]
 })

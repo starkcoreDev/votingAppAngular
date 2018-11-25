@@ -1,5 +1,12 @@
 <div class="animated fadeIn">
-  <h1 class="mb-4"> Welcome to the StarkCore voting platform!</h1>
+  <h1 class="mb-4"> {{name}}, welcome to the StarkCore voting platform!</h1>
+  <p *ngIf="isCandidate">Looks like you are a CANDIDATE, take a look at your information below and don't go and try to
+    vote for yourself, the blockchain will know!</p>
+
+  <p *ngIf="!isCandidate">Looks like you are a VOTER, go ahead and get your candidates address and start to vote.
+    Remember, your vote is anonymous.</p>
+
+  <!-- Voter information whether they are a candidate or not -->
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
@@ -9,6 +16,23 @@
         </div>
         <div class="card-body">
           <h2>Your information</h2>
+
+          <div class="form-group">
+              <div class="card">
+                <div class="card-body p-0 clearfix">
+                  <i class="fa fa-user bg-primary p-4 font-2xl mr-3 float-left"></i>
+                  <div *ngIf="isCandidate">
+                      <div class="h5 text-primary mb-0 pt-3">Candidate</div>
+                      <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
+                  </div>
+                  <div *ngIf="!isCandidate">
+                      <div class="h5 text-primary mb-0 pt-3">Voter</div>
+                      <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">
@@ -36,7 +60,7 @@
     <div class="col-sm-6">
       <div class="card">
         <!-- Show application progress when saving on the blockchain -->
-          <mat-progress-bar *ngIf="showLoading" mode="indeterminate"></mat-progress-bar>
+        <mat-progress-bar *ngIf="showLoading" mode="indeterminate"></mat-progress-bar>
         <div class="card-header">
           <strong>Vote</strong>
           <small>Form</small>
@@ -62,8 +86,8 @@
           <!--/.row-->
           <div class="row">
             <div class="form-group col-sm-4">
-                <button (click)="saveCandidate();" type="button" class="btn btn-block btn-primary">Save</button>
-            </div> 
+              <button (click)="saveCandidate();" type="button" class="btn btn-block btn-primary">Save</button>
+            </div>
           </div>
         </div>
       </div>
@@ -87,7 +111,7 @@
               </tr>
             </thead>
             <tbody>
-              
+
               <tr *ngFor="let candidate of candidateList; let i = index">
                 <td>{{candidate.name}}</td>
                 <td>{{candidate.address}}</td>
@@ -96,8 +120,8 @@
                   <span class="badge badge-success">Voted</span>
                 </td>
                 <td *ngIf="!candidate.voted;">
-                    <span class="badge badge-danger">Not-Voted</span>
-                  </td>
+                  <span class="badge badge-danger">Not-Voted</span>
+                </td>
               </tr>
               <!-- <tr>
                 <td>Samppa Nori</td>

@@ -1,9 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import {Router, NavigationEnd} from '@angular/router';
+import {MainServiceService} from '../../main-service.service';
 
 @Component({
   templateUrl: 'chartjs.component.html'
 })
-export class ChartJSComponent {
+export class ChartJSComponent implements OnInit{
+
+  constructor(public router: Router, public mainService: MainServiceService) {}
+
+  // Public initiation variables
+  public candidateList = [{
+    name: "Test",
+    address: "0x123456789101112131415",
+    dictator: false,
+    votes: 0
+  }];
+
+  public ngOnInit() {
+    console.log("Entering on init for chartjs")
+    const registeredPerson = this.mainService.getLogin();
+    // Check for login here
+    if (!registeredPerson) {
+      // Navigate back to login if false
+      this.router.navigate(['/login']);
+    }
+
+    // Load the candidate result data
+    this.candidateList = [{
+      name: "Test",
+      address: "0x123456789101112131415",
+      dictator: false,
+      votes: 10
+    }]
+  }
 
   // lineChart
   public lineChartData: Array<any> = [

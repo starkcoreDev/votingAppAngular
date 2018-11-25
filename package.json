@@ -57,6 +57,7 @@
     "simple-line-icons": "^2.4.1",
     "ts-helpers": "^1.1.2",
     "tsickle": "^0.33.0",
+    "web3": "^1.0.0-beta.36",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
