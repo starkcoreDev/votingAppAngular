@@ -177,6 +177,7 @@ export class DashboardComponent implements OnInit {
                 voter.tx = blockchainTx.transactionHash;
                 // Save stuff for the voter
                 this.voter.voted = true;
+                this.voter.tx = voter.tx;
                 const voterRef = this.db.object("/voters/" + this.voter.key);
                 voterRef.update(this.voter);
                 this.showLoading = false;
@@ -224,8 +225,9 @@ export class DashboardComponent implements OnInit {
         if (exists.length > 0) {
           let voter: any = exists[0];
           this.voter = voter;
-          this.ropstenAddress = this.ropstenAddress + voter.tx;
+          voter.tx ? (this.ropstenAddress = this.ropstenAddress + voter.tx) : this.ropstenAddress = "No address recorder or error";
         }
+        
       });
 
     this.databaseChange();

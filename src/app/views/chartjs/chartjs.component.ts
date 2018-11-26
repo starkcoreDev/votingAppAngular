@@ -82,6 +82,7 @@ export class ChartJSComponent implements OnInit {
 
     // Load the candidate result data
     this.databaseChange();
+    this.getPollState();
     // TODO: Ugly implementation due to time constraint
     setTimeout(() => {
       this.getWinner();

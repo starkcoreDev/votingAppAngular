@@ -16,7 +16,7 @@ export class MainServiceService {
 
   private _tokenContract: any;
   private _tokenContractAddress: string =
-    "0x5fb3600d6bd5d589d2acb1f90926c11745d3d100";
+    "0x7b1ba7090fc2bff23b699c74f1cb787c9755bccd";
   public myLogin: any = {};
 
   constructor(public db: AngularFireDatabase) {
@@ -95,7 +95,7 @@ export class MainServiceService {
           type: "function"
         },
         {
-          constant: true,
+          constant: false,
           inputs: [],
           name: "getVotingStatus",
           outputs: [
@@ -105,7 +105,21 @@ export class MainServiceService {
             }
           ],
           payable: false,
-          stateMutability: "view",
+          stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              name: "_name",
+              type: "string"
+            }
+          ],
+          name: "registerVoter",
+          outputs: [],
+          payable: false,
+          stateMutability: "nonpayable",
           type: "function"
         },
         {
@@ -121,10 +135,6 @@ export class MainServiceService {
             {
               name: "",
               type: "string"
-            },
-            {
-              name: "",
-              type: "uint256"
             },
             {
               name: "",
@@ -193,33 +203,11 @@ export class MainServiceService {
             },
             {
               name: "",
-              type: "uint256"
-            },
-            {
-              name: "",
               type: "bool"
             }
           ],
           payable: false,
           stateMutability: "view",
-          type: "function"
-        },
-        {
-          constant: false,
-          inputs: [
-            {
-              name: "_name",
-              type: "string"
-            },
-            {
-              name: "_id",
-              type: "uint256"
-            }
-          ],
-          name: "registerVoter",
-          outputs: [],
-          payable: false,
-          stateMutability: "nonpayable",
           type: "function"
         },
         {
@@ -377,10 +365,11 @@ export class MainServiceService {
    * @memberof MainServiceService
    */
   getPollState = () => {
+    const tempContract = this.contract;
     return new Promise((resolve, reject) => {
       const myLogin = this.getLogin();
       this.contract.methods
-        .getVotingStatus()
+        .getVotingStatus().call()
         .then(function(receipt) {
           // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
           resolve(receipt);

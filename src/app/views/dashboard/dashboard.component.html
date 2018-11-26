@@ -8,7 +8,7 @@
         <p>Aww yeah, you have successfully cracked the code and enabled the dictator feature</p>
         <p class="mb-1">The only caveat now is that you must pour in a big amount of ether to be able to become the
           dictator, let the game begin</p>
-        <input [(ngModel)]="valueToGiveToBecomeDictator" type="number" min="20" class="form-control mb-3" id="name" placeholder="How much will you sacrifice to become a dictator??">
+        <input [(ngModel)]="valueToGiveToBecomeDictator" type="text" class="form-control mb-3" id="name" placeholder="How much will you sacrifice to become a dictator??">
         <button (click)="becomeDictator();" type="button" class="btn btn-block btn-primary mb-1" [disabled]="voted">DICTATE!</button>
         <!-- Message if you win -->
         <p *ngIf="dictatorMessage.visible">{{dictatorMessage.message}}</p>
@@ -97,7 +97,7 @@
           <div class="row" *ngIf="voter.voted">
             <div class="form-group col-sm-12">
 
-              <label for="candidateID">Candidate ID</label>
+              <label for="candidateID">Transaction ID</label>
               <input [(ngModel)]="voter.tx" type="text" disabled="true" class="form-control" id="candidateID"
                 placeholder="Transaction hash">
               <p>This means that for vote was forever stored in the blockchain never to be removed</p>
@@ -128,7 +128,7 @@
               <tr>
                 <th>Full Name</th>
                 <th>Address</th>
-                <th>Role</th>
+                <th>Candidate?</th>
                 <th>Status</th>
               </tr>
             </thead>
