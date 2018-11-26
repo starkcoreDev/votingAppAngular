@@ -1,0 +1,15 @@
+version: '2'
+services:
+  voting-app:
+    build:
+      context: .
+      dockerfile: Dockerfile    
+    image: voting-app
+    restart: always
+    ports:
+      - "4200:4200"
+  ganachecli:
+    image: trufflesuite/ganache-cli:latest
+    command: bash "ganache-cli -h 0.0.0.0"
+    ports:
+      - 8545:8545
