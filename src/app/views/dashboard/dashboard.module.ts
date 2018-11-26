@@ -12,6 +12,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material';
 import {MatChipsModule} from '@angular/material/chips';
 
+
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 
@@ -31,6 +32,6 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     MatProgressBarModule,
     MatChipsModule
   ],
-  declarations: [ DashboardComponent ]
+  declarations: [DashboardComponent]
 })
 export class DashboardModule {}

@@ -18,21 +18,21 @@
           <h2>Your information</h2>
 
           <div class="form-group">
-              <div class="card">
-                <div class="card-body p-0 clearfix">
-                  <i class="fa fa-user bg-primary p-4 font-2xl mr-3 float-left"></i>
-                  <div *ngIf="isCandidate">
-                      <div class="h5 text-primary mb-0 pt-3">Candidate</div>
-                      <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
-                  </div>
-                  <div *ngIf="!isCandidate">
-                      <div class="h5 text-primary mb-0 pt-3">Voter</div>
-                      <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
-                  </div>
-                  
+            <div class="card">
+              <div class="card-body p-0 clearfix">
+                <i class="fa fa-user bg-primary p-4 font-2xl mr-3 float-left"></i>
+                <div *ngIf="isCandidate">
+                  <div class="h5 text-primary mb-0 pt-3">Candidate</div>
+                  <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
                 </div>
+                <div *ngIf="!isCandidate">
+                  <div class="h5 text-primary mb-0 pt-3">Voter</div>
+                  <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
+                </div>
+
               </div>
             </div>
+          </div>
           <div class="row">
             <div class="col-sm-12">
               <div class="form-group">
@@ -86,7 +86,7 @@
           <!--/.row-->
           <div class="row">
             <div class="form-group col-sm-4">
-              <button (click)="saveCandidate();" type="button" class="btn btn-block btn-primary">Save</button>
+              <button (click)="saveCandidate();" type="button" class="btn btn-block btn-primary" [disabled]="voted">Save</button>
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@
             </thead>
             <tbody>
 
-              <tr *ngFor="let candidate of candidateList; let i = index">
+              <tr *ngFor="let candidate of candidateList | async">
                 <td>{{candidate.name}}</td>
                 <td>{{candidate.address}}</td>
                 <td>{{candidate.isCandidate}}</td>

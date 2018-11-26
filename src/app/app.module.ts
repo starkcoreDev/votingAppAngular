@@ -1,6 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+import { environment } from "../environments/environment";
 
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
@@ -46,6 +47,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FormsModule} from '@angular/forms';
 import {MainServiceService} from './main-service.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+// Firebase
+import { AngularFireModule} from "@angular/fire";
+// Other firebase modules
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { AngularFireDatabaseModule} from "@angular/fire/database";
 
 @NgModule({
   imports: [
@@ -66,7 +72,10 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     FormsModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireDatabaseModule
   ],
   declarations: [
     AppComponent,
@@ -76,12 +85,13 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     LoginComponent,
     RegisterComponent
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }, MainServiceService],
+  providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
+    MainServiceService
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-
-}
+export class AppModule {}
