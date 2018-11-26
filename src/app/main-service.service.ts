@@ -16,11 +16,10 @@ export class MainServiceService {
 
   private _tokenContract: any;
   private _tokenContractAddress: string =
-    "0x1384a1febaae2663f3ee7aded50cd82853e45ad8";
+    "0x5fb3600d6bd5d589d2acb1f90926c11745d3d100";
   public myLogin: any = {};
 
   constructor(public db: AngularFireDatabase) {
-
     // Initial declarations, holds the login data
     this.myLogin = {
       name: "",
@@ -65,6 +64,24 @@ export class MainServiceService {
       [
         {
           constant: false,
+          inputs: [],
+          name: "becomeDictator",
+          outputs: [],
+          payable: true,
+          stateMutability: "payable",
+          type: "function"
+        },
+        {
+          constant: false,
+          inputs: [],
+          name: "setVotingStatus",
+          outputs: [],
+          payable: false,
+          stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          constant: false,
           inputs: [
             {
               name: "candidateNumber",
@@ -75,6 +92,20 @@ export class MainServiceService {
           outputs: [],
           payable: false,
           stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: "getVotingStatus",
+          outputs: [
+            {
+              name: "",
+              type: "string"
+            }
+          ],
+          payable: false,
+          stateMutability: "view",
           type: "function"
         },
         {
@@ -116,6 +147,34 @@ export class MainServiceService {
           outputs: [],
           payable: false,
           stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: "getChairperson",
+          outputs: [
+            {
+              name: "",
+              type: "address"
+            }
+          ],
+          payable: false,
+          stateMutability: "view",
+          type: "function"
+        },
+        {
+          constant: true,
+          inputs: [],
+          name: "getNumberOfVoters",
+          outputs: [
+            {
+              name: "",
+              type: "uint256"
+            }
+          ],
+          payable: false,
+          stateMutability: "view",
           type: "function"
         },
         {
@@ -185,6 +244,18 @@ export class MainServiceService {
           ],
           name: "newVote",
           type: "event"
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              name: "msg",
+              type: "string"
+            }
+          ],
+          name: "dictatorEvnt",
+          type: "event"
         }
       ],
       this._tokenContractAddress
@@ -202,6 +273,17 @@ export class MainServiceService {
         // remove event from local database
       })
       .on("error", console.error);
+
+    // Dictator event
+    this.contract.events
+      .dictatorEvnt({}, function(error, event) {})
+      .on("data", function(event) {
+        console.log("YOU HAVE BECOME A DICTATOR!"); // same results as the optional callback above
+      })
+      .on("changed", function(event) {
+        // remove event from local database
+      })
+      .on("error", console.error);
   }
 
   // General functions
@@ -211,13 +293,11 @@ export class MainServiceService {
 
   public toggleDictatorStatus = () => {
     this.dictatorStatus = !this.dictatorStatus;
-  }
+  };
 
   /**
    * Login functions
    */
-
- 
 
   public getLogin() {
     // Get from local storage, if it does not exist yet return false
@@ -248,47 +328,68 @@ export class MainServiceService {
    *
    * @memberof MainServiceService
    */
-  registerVoterBlockchain = () => {
-    return new Promise((resolve, reject)=>{
+  registerVoterBlockchain = name => {
+    return new Promise((resolve, reject) => {
       const myLogin = this.getLogin();
       this.contract.methods
-        .registerVoter("Alfonso", 20)
+        .registerVoter(name)
         .send({ from: myLogin.address })
         .then(function(receipt) {
           // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
           resolve(receipt);
           console.log(receipt);
-
         })
         .catch(function(err) {
           console.error(err);
           reject(err);
         });
-    })
-    
+    });
   };
   /**
    * Allows a user to become a dictator
    *
    * @memberof MainServiceService
    */
-  becomeDictator = (amount) => {
-    return new Promise((resolve, reject)=>{
+  becomeDictator = amount => {
+    return new Promise((resolve, reject) => {
       const myLogin = this.getLogin();
       this.contract.methods
         .becomeDictator()
-        .send({ from: myLogin.address, value: this._web3.toWei(amount, "ether")})
-        .then(function (receipt) {
+        .send({
+          from: myLogin.address,
+          value: this._web3.utils.toWei(amount, "ether")
+        })
+        .then(function(receipt) {
           // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
           resolve(receipt);
           console.log(receipt);
-
         })
-        .catch(function (err) {
+        .catch(function(err) {
           console.error(err);
           reject(err);
         });
-    })
-  }
+    });
+  };
 
+  /**
+   * Gets the current state of the contract
+   *
+   * @memberof MainServiceService
+   */
+  getPollState = () => {
+    return new Promise((resolve, reject) => {
+      const myLogin = this.getLogin();
+      this.contract.methods
+        .getVotingStatus()
+        .then(function(receipt) {
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+          resolve(receipt);
+          console.log(receipt);
+        })
+        .catch(function(err) {
+          console.error(err);
+          reject(err);
+        });
+    });
+  };
 }

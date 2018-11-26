@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit {
   valueToGiveToBecomeDictator = 0;
   dictatorMessage = {
     visible: false,
+    loading: false,
     message:
       "You have become the dictator! There's absolutely not price so enjoy the recognition!"
   };
@@ -60,18 +61,57 @@ export class DashboardComponent implements OnInit {
   };
   public candidateList: Observable<any[]>;
 
+
   /**
    * Function that allows you to become the dictaor by running a smart contract function and sending it some ether
    *
    * @memberof DashboardComponent
    */
   public becomeDictator = async value => {
+    // Check for the value in the frontend
+    if(this.valueToGiveToBecomeDictator < 20) {
+      let snackBarFinishedOther = this.snackBar.open(
+        "Stop being cheap, put in more ether",
+        "Error",
+        {
+          duration: 5000
+        }
+      );
+      throw new Error("Stop being cheap! ");
+    }
+
     const hasBecomeDictator = await this.mainService.becomeDictator(
       this.valueToGiveToBecomeDictator
     );
+    this.dictatorMessage.loading = true;
     if (hasBecomeDictator) {
+      let snackBarFinishedOther = this.snackBar.open(
+        "Saved FOREVER in the blockchain!",
+        "",
+        {
+          duration: 5000
+        }
+      );
+      this.dictatorMessage.loading = false;
       console.log("You have become the dictator");
       this.dictatorMessage.visible = true;
+      // Update database to reflect new dictator status
+      this.db
+        .list("/voters", ref =>
+          ref.orderByChild("address").equalTo(this.voter.address)
+        )
+        .valueChanges()
+        .subscribe(exists => {
+          // Check if exists
+          if (exists.length > 0) {
+            let voter: any = exists[0];
+            const key = voter.key;
+            voter.dictator = true;
+            const dictatorRef = this.db.object("/voters/" + key);
+            dictatorRef.update(voter);
+          }
+        });
+
     } else {
       console.log("Something happened and you did not become a dictator");
     }
@@ -131,7 +171,7 @@ export class DashboardComponent implements OnInit {
               );
 
               // Alert once finished
-              const blockchainTx: any = await this.mainService.registerVoterBlockchain();
+              const blockchainTx: any = await this.mainService.registerVoterBlockchain(this.voter.name);
               // Verify the transactionw went througn and save
               if (blockchainTx) {
                 voter.tx = blockchainTx.transactionHash;

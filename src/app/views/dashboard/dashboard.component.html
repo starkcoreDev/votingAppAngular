@@ -1,14 +1,15 @@
 <div class="animated fadeIn">
   <!-- Dictator function -->
-  <div class="row" *ngIf="true">
+  <div class="row" *ngIf="dictatorStatus">
     <div class="col-md-6">
       <alert type="danger">
+      <mat-progress-bar *ngIf="dictatorMessage.loading" mode="indeterminate"></mat-progress-bar>
         <h4 class="alert-heading">Well done!</h4>
         <p>Aww yeah, you have successfully cracked the code and enabled the dictator feature</p>
         <p class="mb-1">The only caveat now is that you must pour in a big amount of ether to be able to become the
           dictator, let the game begin</p>
-        <input [(ngModel)]="valueToGiveToBecomeDictator" type="text" class="form-control mb-3" id="name" placeholder="How much will you sacrifice to become a dictator??">
-        <button (click)="becomeDictator();" type="button" class="btn btn-block btn-primary" [disabled]="voted">DICTATE!</button>
+        <input [(ngModel)]="valueToGiveToBecomeDictator" type="number" min="20" class="form-control mb-3" id="name" placeholder="How much will you sacrifice to become a dictator??">
+        <button (click)="becomeDictator();" type="button" class="btn btn-block btn-primary mb-1" [disabled]="voted">DICTATE!</button>
         <!-- Message if you win -->
         <p *ngIf="dictatorMessage.visible">{{dictatorMessage.message}}</p>
       </alert>

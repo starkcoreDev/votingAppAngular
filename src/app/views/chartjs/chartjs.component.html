@@ -1,4 +1,12 @@
-<div class="animated fadeIn">
+<!-- Poll is open still son this does not show anything -->
+<div *ngIf="pollState === 'Open'" class="animated fadeIn">
+<h1>Election Results</h1>
+<p>Here you will be able to view the results from the past election, all recorded on the blockchain, unfortunately, the poll is still open, so no results yet.</p>
+<img src="assets/img/brand/lock.png" height="160" width="160"/>
+</div>
+
+
+<div *ngIf="pollState === 'Closed'" class="animated fadeIn">
   <h1>Election Results</h1>
   <p>Here you will be able to view the results from the past election, all recorded on the blockchain</p>
 
@@ -136,7 +144,7 @@
         </div>
       </div>
       <div class="card-body">
-<div class="chart-wrapper" *ngIf="isDataAvailable">
+        <div class="chart-wrapper" *ngIf="isDataAvailable">
           <canvas baseChart class="chart" [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
             (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
         </div>

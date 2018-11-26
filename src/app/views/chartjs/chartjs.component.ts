@@ -20,6 +20,20 @@ export class ChartJSComponent implements OnInit {
   public realCandidateList = [];
   public winner = {};
   public isDataAvailable : boolean = false;
+  public pollState: any = "Open";
+
+
+  /**
+  * Gets the poll state from the contract 
+  *
+  * @memberof DashboardComponent
+  */
+  public getPollState = async () => {
+    const pollState = await this.mainService.getPollState();
+    if (pollState) {
+      this.pollState = pollState;
+    }
+  }
 
   /**
    *
