@@ -16,7 +16,7 @@ export class MainServiceService {
 
   private _tokenContract: any;
   private _tokenContractAddress: string =
-    "0x7b1ba7090fc2bff23b699c74f1cb787c9755bccd";
+    "0x29499b632d90de8992b6118ea9c16add5be95e5b";
   public myLogin: any = {};
 
   constructor(public db: AngularFireDatabase) {
