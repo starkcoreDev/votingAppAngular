@@ -40,8 +40,8 @@ export class MainServiceService {
         "Please use a dapp browser like mist or MetaMask plugin for chrome"
       );
     }
-    // Set default account
-    this._web3.eth.defaultAccount = this._web3.eth.accounts[0];
+    // // Set default account
+    // this._web3.eth.defaultAccount = this._web3.eth.accounts[0];
 
     // Get account test
     this._web3.eth
