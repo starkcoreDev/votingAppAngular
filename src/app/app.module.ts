@@ -47,6 +47,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FormsModule} from '@angular/forms';
 import {MainServiceService} from './main-service.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatBottomSheetModule } from "@angular/material/bottom-sheet";
 // Firebase
 import { AngularFireModule} from "@angular/fire";
 // Other firebase modules
@@ -75,7 +76,8 @@ import { AngularFireDatabaseModule} from "@angular/fire/database";
     MatSnackBarModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    MatBottomSheetModule
   ],
   declarations: [
     AppComponent,

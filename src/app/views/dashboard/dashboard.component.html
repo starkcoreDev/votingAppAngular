@@ -1,9 +1,25 @@
 <div class="animated fadeIn">
-  <h1 class="mb-4"> {{name}}, welcome to the StarkCore voting platform!</h1>
-  <p *ngIf="isCandidate">Looks like you are a CANDIDATE, take a look at your information below and don't go and try to
+  <!-- Dictator function -->
+  <div class="row" *ngIf="true">
+    <div class="col-md-6">
+      <alert type="danger">
+        <h4 class="alert-heading">Well done!</h4>
+        <p>Aww yeah, you have successfully cracked the code and enabled the dictator feature</p>
+        <p class="mb-1">The only caveat now is that you must pour in a big amount of ether to be able to become the
+          dictator, let the game begin</p>
+        <input [(ngModel)]="valueToGiveToBecomeDictator" type="text" class="form-control mb-3" id="name" placeholder="How much will you sacrifice to become a dictator??">
+        <button (click)="becomeDictator();" type="button" class="btn btn-block btn-primary" [disabled]="voted">DICTATE!</button>
+        <!-- Message if you win -->
+        <p *ngIf="dictatorMessage.visible">{{dictatorMessage.message}}</p>
+      </alert>
+    </div>
+  </div>
+  <h1 class="mb-4"> {{voter.name}}, welcome to the StarkCore voting platform!</h1>
+  <p *ngIf="voter.isCandidate">Looks like you are a CANDIDATE, take a look at your information below and don't go and
+    try to
     vote for yourself, the blockchain will know!</p>
 
-  <p *ngIf="!isCandidate">Looks like you are a VOTER, go ahead and get your candidates address and start to vote.
+  <p *ngIf="!voter.isCandidate">Looks like you are a VOTER, go ahead and get your candidates address and start to vote.
     Remember, your vote is anonymous.</p>
 
   <!-- Voter information whether they are a candidate or not -->
@@ -21,13 +37,13 @@
             <div class="card">
               <div class="card-body p-0 clearfix">
                 <i class="fa fa-user bg-primary p-4 font-2xl mr-3 float-left"></i>
-                <div *ngIf="isCandidate">
-                  <div class="h5 text-primary mb-0 pt-3">Candidate</div>
-                  <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
+                <div *ngIf="voter.isCandidate">
+                  <div class="h5 text-primary mb-0 pt-3">{{voter.name}}</div>
+                  <div class="text-muted text-uppercase font-weight-bold font-xs">Candidate</div>
                 </div>
-                <div *ngIf="!isCandidate">
-                  <div class="h5 text-primary mb-0 pt-3">Voter</div>
-                  <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
+                <div *ngIf="!voter.isCandidate">
+                  <div class="h5 text-primary mb-0 pt-3">{{voter.name}}</div>
+                  <div class="text-muted text-uppercase font-weight-bold font-xs">Voter</div>
                 </div>
 
               </div>
@@ -37,7 +53,7 @@
             <div class="col-sm-12">
               <div class="form-group">
                 <label for="name">Name</label>
-                <input [(ngModel)]="name" type="text" class="form-control" id="name" placeholder="Enter your name"
+                <input [(ngModel)]="voter.name" type="text" class="form-control" id="name" placeholder="Enter your name"
                   [disabled]="true">
               </div>
             </div>
@@ -47,7 +63,7 @@
             <div class="col-sm-12">
               <div class="form-group">
                 <label for="ccnumber">Address</label>
-                <input [(ngModel)]="address" type="text" class="form-control" id="ccnumber" placeholder="0x123..."
+                <input [(ngModel)]="voter.address" type="text" class="form-control" id="ccnumber" placeholder="0x123..."
                   [disabled]="true">
               </div>
             </div>
@@ -77,10 +93,15 @@
             </div>
           </div>
           <!--/.row-->
-          <div class="row">
-            <div class="form-group col-sm-4">
+          <div class="row" *ngIf="voter.voted">
+            <div class="form-group col-sm-12">
+
               <label for="candidateID">Candidate ID</label>
-              <input [(ngModel)]="candidateID" type="text" class="form-control" id="candidateID" placeholder="Enter the ID here">
+              <input [(ngModel)]="voter.tx" type="text" disabled="true" class="form-control" id="candidateID"
+                placeholder="Transaction hash">
+              <p>This means that for vote was forever stored in the blockchain never to be removed</p>
+              <label> EthereScan ID: </label>
+              <a href="{{ropstenAddress}}" target="_blank">{{ropstenAddress}}</a>
             </div>
           </div>
           <!--/.row-->

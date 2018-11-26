@@ -11,6 +11,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatSnackBar } from '@angular/material';
 import {MatChipsModule} from '@angular/material/chips';
+// Alert Component
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 
 import { DashboardComponent } from './dashboard.component';
@@ -30,7 +32,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    MatChipsModule
+    MatChipsModule,
+    AlertModule.forRoot()
   ],
   declarations: [DashboardComponent]
 })

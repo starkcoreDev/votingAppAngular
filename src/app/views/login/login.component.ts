@@ -28,7 +28,10 @@ export class LoginComponent implements OnInit {
     name: "",
     address: "",
     isCandidate: false,
-    voted: false
+    voted: false,
+    key: '',
+    votes: 0,
+    dictator: false
   };
   // Register the user, alert the user if the wrong hash is entered
   register = () => {
@@ -54,7 +57,10 @@ export class LoginComponent implements OnInit {
               name: this.myLogin.name,
               address: this.myLogin.address,
               isCandidate: this.myLogin.isCandidate,
-              voted: false
+              voted: false,
+              key: '',
+              votes: 0,
+              dictator: false
             };
             // // Save data to localstorage as well
             this.mainService.saveLogin(
@@ -63,8 +69,12 @@ export class LoginComponent implements OnInit {
             );
 
             // Save data to firebase
-            const itemsRef = this.db.list("voters");
-            itemsRef.push(this.myLogin);
+            const votersRef = this.db.list("voters").push(this.myLogin);
+            var newKey = votersRef.key;
+            // Get key and update the object
+            this.myLogin.key = newKey;
+            const singeleVoterRef = this.db.object("/voters/" + newKey);
+            singeleVoterRef.update(this.myLogin);
 
             this.router.navigate(["/dashboard"]);
           } else {

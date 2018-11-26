@@ -1,37 +1,37 @@
 <div class="animated fadeIn">
-    <h1>Election Results</h1>
-    <p>Here you will be able to view the results from the past election, all recorded on the blockchain</p>
+  <h1>Election Results</h1>
+  <p>Here you will be able to view the results from the past election, all recorded on the blockchain</p>
 
-    <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-header">
-              <i class="fa fa-align-justify"></i> Registered Voters
-            </div>
-            <div class="card-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Full Name</th>
-                    <th>Address</th>
-                    <th>Number of votes</th>
-                    <th>Role</th>
-                  </tr>
-                </thead>
-                <tbody>
-    
-                  <tr *ngFor="let candidate of candidateList; let i = index">
-                    <td>{{candidate.name}}</td>
-                    <td>{{candidate.address}}</td>
-                    <td>{{candidate.votes}}</td>
-                    <td *ngIf="candidate.dictator;">
-                      <span class="badge badge-success">Dictator</span>
-                    </td>
-                    <td *ngIf="!candidate.dictator;">
-                      <span class="badge badge-danger">Boring President</span>
-                    </td>
-                  </tr>
-                  <!-- <tr>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Available Candidates
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Address</th>
+                <th>Number of votes</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let candidate of realCandidateList ; let i = index">
+                <td>{{candidate.name}}</td>
+                <td>{{candidate.address}}</td>
+                <td>{{candidate.votes}}</td>
+                <td *ngIf="candidate.dictator;">
+                  <span class="badge badge-success">Dictator</span>
+                </td>
+                <td *ngIf="!candidate.dictator;">
+                  <span class="badge badge-danger">Boring President</span>
+                </td>
+              </tr>
+              <!-- <tr>
                     <td>Samppa Nori</td>
                     <td>2012/01/01</td>
                     <td>Member</td>
@@ -71,15 +71,15 @@
                       <span class="badge badge-success">Active</span>
                     </td>
                   </tr> -->
-                </tbody>
-              </table>
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
-        <!--/.col-->
       </div>
+    </div>
+    <!--/.col-->
+  </div>
 
-      <!-- OTHER CHARTS -->
+  <!-- OTHER CHARTS -->
   <div class="card-columns cols-2">
     <!-- <div class="card">
       <div class="card-header">
@@ -136,47 +136,44 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="chart-wrapper">
-          <canvas baseChart class="chart"
-          [data]="doughnutChartData"
-          [labels]="doughnutChartLabels"
-          [chartType]="doughnutChartType"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
+<div class="chart-wrapper" *ngIf="isDataAvailable">
+          <canvas baseChart class="chart" [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+            (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
         </div>
       </div>
     </div>
 
     <div class="card">
-        <div class="card-header">
-          Winner!
-          <div class="card-header-actions">
-            <a href="http://www.chartjs.org">
-              <small class="text-muted">docs</small>
-            </a>
-          </div>
+      <div class="card-header">
+        Winner!
+        <div class="card-header-actions">
+          <a href="http://www.chartjs.org">
+            <small class="text-muted">docs</small>
+          </a>
         </div>
-        <div class="card-body">
-          <div class="chart-wrapper">
-              <div class="form-group">
-                  <div class="card">
-                    <div class="card-body p-0 clearfix">
-                      <i class="fa fa-user bg-primary p-4 font-2xl mr-3 float-left"></i>
-                      <div>
-                          <div class="h5 text-primary mb-0 pt-3">Candidate</div>
-                          <div class="text-muted text-uppercase font-weight-bold font-xs">President</div>
-                      </div>
-                      <!-- <div *ngIf="!isCandidate">
+      </div>
+      <div class="card-body">
+        <div class="chart-wrapper">
+          <div class="form-group">
+            <div class="card">
+              <div class="card-body p-0 clearfix">
+                <i class="fa fa-user bg-primary p-4 font-2xl mr-3 float-left"></i>
+                <div>
+                  <div class="h5 text-primary mb-0 pt-3">{{winner.name}}</div>
+                  <div class="text-muted text-uppercase font-xs">{{winner.address}}</div>
+                  <div class="text-muted text-uppercase font-weight-bold font-xs">President</div>
+                </div>
+                <!-- <div *ngIf="!isCandidate">
                           <div class="h5 text-primary mb-0 pt-3">Voter</div>
                           <div class="text-muted text-uppercase font-weight-bold font-xs">Role</div>
                       </div> -->
-                      
-                    </div>
-                  </div>
-                </div>
+
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
     <!-- <div class="card">
       <div class="card-header">
         Radar Chart

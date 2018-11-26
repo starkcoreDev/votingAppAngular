@@ -11,12 +11,24 @@ import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
 export class MainServiceService {
   private _account: string = null;
   private _web3: any;
+  private contract;
+  public dictatorStatus = false;
 
   private _tokenContract: any;
   private _tokenContractAddress: string =
-    "0x0a074ce739ad522012b2085ba495395c6edba142";
+    "0x1384a1febaae2663f3ee7aded50cd82853e45ad8";
+  public myLogin: any = {};
 
   constructor(public db: AngularFireDatabase) {
+
+    // Initial declarations, holds the login data
+    this.myLogin = {
+      name: "",
+      address: "",
+      isCandidate: false,
+      voted: false
+    };
+
     if (typeof window.web3 !== "undefined") {
       // Use Mist/MetaMask's provider
       this._web3 = new Web3(window.web3.currentProvider);
@@ -29,6 +41,8 @@ export class MainServiceService {
         "Please use a dapp browser like mist or MetaMask plugin for chrome"
       );
     }
+    // Set default account
+    this._web3.eth.defaultAccount = this._web3.eth.accounts[0];
 
     // Get account test
     this._web3.eth
@@ -47,17 +61,17 @@ export class MainServiceService {
       });
 
     // Read contract here
-    const contract = new this._web3.eth.Contract(
+    this.contract = new this._web3.eth.Contract(
       [
         {
           constant: false,
           inputs: [
             {
-              name: "to",
-              type: "address"
+              name: "candidateNumber",
+              type: "uint256"
             }
           ],
-          name: "delegate",
+          name: "voteForCandidate",
           outputs: [],
           payable: false,
           stateMutability: "nonpayable",
@@ -65,11 +79,24 @@ export class MainServiceService {
         },
         {
           constant: true,
-          inputs: [],
-          name: "winningProposal",
+          inputs: [
+            {
+              name: "candidateNumber",
+              type: "uint256"
+            }
+          ],
+          name: "getCandidateInfo",
           outputs: [
             {
-              name: "_winningProposal",
+              name: "",
+              type: "string"
+            },
+            {
+              name: "",
+              type: "uint256"
+            },
+            {
+              name: "",
               type: "uint8"
             }
           ],
@@ -81,37 +108,63 @@ export class MainServiceService {
           constant: false,
           inputs: [
             {
-              name: "toVoter",
-              type: "address"
+              name: "candidateNumber",
+              type: "uint256"
             }
           ],
-          name: "giveRightToVote",
+          name: "becomeInCandidate",
           outputs: [],
           payable: false,
           stateMutability: "nonpayable",
+          type: "function"
+        },
+        {
+          constant: true,
+          inputs: [
+            {
+              name: "_address",
+              type: "address"
+            }
+          ],
+          name: "getVoterInfo",
+          outputs: [
+            {
+              name: "",
+              type: "string"
+            },
+            {
+              name: "",
+              type: "uint256"
+            },
+            {
+              name: "",
+              type: "bool"
+            }
+          ],
+          payable: false,
+          stateMutability: "view",
           type: "function"
         },
         {
           constant: false,
           inputs: [
             {
-              name: "toProposal",
-              type: "uint8"
+              name: "_name",
+              type: "string"
+            },
+            {
+              name: "_id",
+              type: "uint256"
             }
           ],
-          name: "vote",
+          name: "registerVoter",
           outputs: [],
           payable: false,
           stateMutability: "nonpayable",
           type: "function"
         },
         {
-          inputs: [
-            {
-              name: "_numProposals",
-              type: "uint8"
-            }
-          ],
+          inputs: [],
           payable: false,
           stateMutability: "nonpayable",
           type: "constructor"
@@ -120,29 +173,17 @@ export class MainServiceService {
           anonymous: false,
           inputs: [
             {
-              indexed: true,
-              name: "_from",
-              type: "address"
+              indexed: false,
+              name: "candidateName",
+              type: "string"
             },
             {
               indexed: false,
-              name: "_value",
+              name: "votes",
               type: "uint256"
             }
           ],
-          name: "Test",
-          type: "event"
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: false,
-              name: "text",
-              type: "string"
-            }
-          ],
-          name: "VoteWorked",
+          name: "newVote",
           type: "event"
         }
       ],
@@ -150,8 +191,8 @@ export class MainServiceService {
     );
 
     // Subscribe to events
-    contract.events
-      .VoteWorked({}, function(error, event) {
+    this.contract.events
+      .newVote({}, function(error, event) {
         console.log(event);
       })
       .on("data", function(event) {
@@ -163,17 +204,20 @@ export class MainServiceService {
       .on("error", console.error);
   }
 
+  // General functions
+  public getDictatorStatus = () => {
+    return this.dictatorStatus;
+  };
+
+  public toggleDictatorStatus = () => {
+    this.dictatorStatus = !this.dictatorStatus;
+  }
+
   /**
    * Login functions
    */
 
-  // Initial declarations, holds the login data
-  myLogin = {
-    name: "",
-    address: "",
-    isCandidate: false,
-    voted: false
-  };
+ 
 
   public getLogin() {
     // Get from local storage, if it does not exist yet return false
@@ -187,10 +231,7 @@ export class MainServiceService {
     }
   }
 
-  public saveLogin(
-    name: string,
-    address: string
-  ): void {
+  public saveLogin(name: string, address: string): void {
     // memory save (NOT USED)
     this.myLogin.name = name;
     this.myLogin.address = address;
@@ -201,4 +242,53 @@ export class MainServiceService {
   /**
    * Contract functions
    */
+
+  /**
+   * Register voter service
+   *
+   * @memberof MainServiceService
+   */
+  registerVoterBlockchain = () => {
+    return new Promise((resolve, reject)=>{
+      const myLogin = this.getLogin();
+      this.contract.methods
+        .registerVoter("Alfonso", 20)
+        .send({ from: myLogin.address })
+        .then(function(receipt) {
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+          resolve(receipt);
+          console.log(receipt);
+
+        })
+        .catch(function(err) {
+          console.error(err);
+          reject(err);
+        });
+    })
+    
+  };
+  /**
+   * Allows a user to become a dictator
+   *
+   * @memberof MainServiceService
+   */
+  becomeDictator = (amount) => {
+    return new Promise((resolve, reject)=>{
+      const myLogin = this.getLogin();
+      this.contract.methods
+        .becomeDictator()
+        .send({ from: myLogin.address, value: this._web3.toWei(amount, "ether")})
+        .then(function (receipt) {
+          // receipt can also be a new contract instance, when coming from a "contract.deploy({...}).send()"
+          resolve(receipt);
+          console.log(receipt);
+
+        })
+        .catch(function (err) {
+          console.error(err);
+          reject(err);
+        });
+    })
+  }
+
 }
